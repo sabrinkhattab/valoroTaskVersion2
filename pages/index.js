@@ -1,88 +1,58 @@
-import React from 'react'
+import React , {Component} from 'react'
 import Head from 'next/head'
 import Nav from '../components/nav'
+import {connect} from 'react-redux'
+import {getData} from "../redux/actions/getData";
+import {bindActionCreators}  from "redux";
+import Link from "next/link";
+import Layout from "../components/Layout/Layout";
+import Reservation from "../components/Reservation/Reservation";
 
-const Home = () => (
-  <div>
-    <Head>
-      <title>Home</title>
-      <link rel="icon" href="/favicon.ico" />
-    </Head>
 
-    <Nav />
+class  Home extends Component{
 
-    <div className="hero">
-      <h1 className="title">Welcome to Next.js!</h1>
-      <p className="description">
-        To get started, edit <code>pages/index.js</code> and save to reload.
-      </p>
 
-      <div className="row">
-        <a href="https://nextjs.org/docs" className="card">
-          <h3>Documentation &rarr;</h3>
-          <p>Learn more about Next.js in the documentation.</p>
-        </a>
-        <a href="https://nextjs.org/learn" className="card">
-          <h3>Next.js Learn &rarr;</h3>
-          <p>Learn about Next.js by following an interactive tutorial!</p>
-        </a>
-        <a
-          href="https://github.com/zeit/next.js/tree/master/examples"
-          className="card"
-        >
-          <h3>Examples &rarr;</h3>
-          <p>Find other example boilerplates on the Next.js GitHub.</p>
-        </a>
-      </div>
-    </div>
+    static getInitialProps({store, isServer, pathname, query}) {
+//        const action =getData();
+  //      store.dispatch(action);
 
-    <style jsx>{`
-      .hero {
-        width: 100%;
-        color: #333;
-      }
-      .title {
-        margin: 0;
-        width: 100%;
-        padding-top: 80px;
-        line-height: 1.15;
-        font-size: 48px;
-      }
-      .title,
-      .description {
-        text-align: center;
-      }
-      .row {
-        max-width: 880px;
-        margin: 80px auto 40px;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-around;
-      }
-      .card {
-        padding: 18px 18px 24px;
-        width: 220px;
-        text-align: left;
-        text-decoration: none;
-        color: #434343;
-        border: 1px solid #9b9b9b;
-      }
-      .card:hover {
-        border-color: #067df7;
-      }
-      .card h3 {
-        margin: 0;
-        color: #067df7;
-        font-size: 18px;
-      }
-      .card p {
-        margin: 0;
-        padding: 12px 0 0;
-        font-size: 13px;
-        color: #333;
-      }
-    `}</style>
-  </div>
-)
 
-export default Home
+         return {isServer}; // you can pass some custom props to component from here
+    }
+
+    componentDidMount() {
+        if(!this.props.payloadData.Requested) {
+            this.props.getdata()
+            console.log("call")
+        }
+        else
+            console.log("didn't call")
+    }
+
+    render() {
+        console.log( 'index',this.props.payloadData.Recruit)
+        const {Recruit} = this.props.payloadData
+        return(
+            <Layout sideBarData={Recruit}>
+                <Reservation></Reservation>
+
+
+            </Layout>
+        )
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        getdata : bindActionCreators(getData , dispatch)
+    }
+};
+const mapStateToProps = (state) =>{
+    return{
+        payloadData:state.Data
+    }
+}
+
+
+export default connect(mapStateToProps,mapDispatchToProps)(Home);
+

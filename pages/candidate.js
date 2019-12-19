@@ -4,7 +4,7 @@ import {getData} from "../redux/actions/getData";
 import {connect} from 'react-redux'
 import Layout from "../components/Layout/Layout";
 import { useRouter } from 'next/router';
-class about extends React.Component{
+class candidate extends React.Component{
     static getInitialProps({store, isServer, pathname, query }) {
 
                 return {isServer ,  query};
@@ -24,12 +24,11 @@ class about extends React.Component{
         return(
             <Layout sideBarData={Recruit}>
                 <div className="singleCandidate-wrapper">
-                    <h1>Single candidate page</h1>
-                    <h3>{this.props.query.CandidateName}</h3>
+                    <h1>{this.props.query.CandidateName}</h1>
+                    <img src={this.props.query.avatar}/>
                 </div>
-                <style>{`
+                <style >{`
                  .singleCandidate-wrapper{
-                    background-color: tomato;
                     width : 300px;
                     height:auto;
                     position: absolute;
@@ -58,4 +57,4 @@ const mapStateToProps = (state) =>{
         payloadData:state.Data
     }
 }
-export default connect(mapStateToProps , mapDispatchToProps)(about);
+export default connect(mapStateToProps , mapDispatchToProps)(candidate);
